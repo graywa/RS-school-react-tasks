@@ -1,0 +1,15 @@
+.search {
+  display: flex;
+  justify-content: center;
+}
+.search input {
+  width: 420px;
+  padding: 10px 20px 10px 50px;
+  border: 1px solid rgb(133, 133, 133);
+  border-radius: 20px;
+}
+.search img {
+  position: relative;
+  left: 40px;  
+  cursor: pointer;
+}
