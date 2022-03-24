@@ -5,6 +5,7 @@ import samsung from './assets/samsung.jpg';
 
 export const goods = [
   {
+    id: 1,
     title: 'Телевизор Harper 24R49OT',
     photo: harper,
     rating: 4.7,
@@ -14,6 +15,7 @@ export const goods = [
     video: false,
   },
   {
+    id: 2,
     title: 'Телевизор LG 43UP8100',
     photo: lg,
     rating: 5.0,
@@ -23,6 +25,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 3,
     title: 'Телевизор Samsung QE55Q77',
     photo: samsung,
     rating: 4.4,
@@ -32,6 +35,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 4,
     title: 'Телевизор LG OLED48A1',
     photo: lg2,
     rating: 5.0,
@@ -41,6 +45,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 5,
     title: 'Телевизор Harper 24R49OT',
     photo: harper,
     rating: 4.7,
@@ -50,6 +55,7 @@ export const goods = [
     video: false,
   },
   {
+    id: 6,
     title: 'Телевизор LG 43UP8100',
     photo: lg,
     rating: 5.0,
@@ -59,6 +65,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 7,
     title: 'Телевизор Samsung QE55Q77',
     photo: samsung,
     rating: 4.4,
@@ -68,6 +75,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 8,
     title: 'Телевизор LG OLED48A1',
     photo: lg2,
     rating: 5.0,
@@ -77,6 +85,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 9,
     title: 'Телевизор Harper 24R49OT',
     photo: harper,
     rating: 4.7,
@@ -86,6 +95,7 @@ export const goods = [
     video: false,
   },
   {
+    id: 10,
     title: 'Телевизор LG 43UP8100',
     photo: lg,
     rating: 5.0,
@@ -95,6 +105,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 11,
     title: 'Телевизор Samsung QE55Q77',
     photo: samsung,
     rating: 4.4,
@@ -104,6 +115,7 @@ export const goods = [
     video: true,
   },
   {
+    id: 12,
     title: 'Телевизор LG OLED48A1',
     photo: lg2,
     rating: 5.0,
