@@ -11,7 +11,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <Header />
-        <div className="content">
+        <div className="container">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="aboutus" element={<AboutUs />} />

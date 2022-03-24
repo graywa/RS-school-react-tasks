@@ -1,0 +1,142 @@
+.card {
+  position: relative;
+  max-width: 280px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px 2px #ebebeb;
+  transition: .2s linear;
+}
+.card:hover {
+  box-shadow: 0 0 12px 2px #c0c0c0;
+}
+.card__photo img {
+  margin: 0 auto;
+  cursor: pointer;
+}
+.card__discount {
+  position: absolute;
+  right: -15px;
+  top: -10px;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 12px 2px #ebebeb;
+  width: 40px;
+  height: 40px;  
+
+  background: rgb(211, 53, 53);
+  border-radius: 50%;
+
+  font-size: 12px;
+  color: #fff;
+}
+.card__info { 
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 220px;
+  padding: 0 15px 15px;
+}
+.card__video {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+
+  color:rgb(52, 72, 161);
+  font-size: 14px;
+  cursor: pointer;
+}
+.card__video img {
+  display: inline-block;
+}
+.card__rating-code {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 20px;
+}
+.card__rating {
+  display: flex;
+  align-items: end;
+  gap: 5px;
+  color: rgb(237 138 25);
+  cursor: pointer;
+}
+.card__rating img {
+  display: inline-block;
+}
+.card__code {
+  font-size: 14px;
+}
+.card__title {
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: .2s linear;
+}
+.card__title:hover {
+  color:rgb(211, 53, 53)
+}
+.card__price {
+  margin-bottom: 10px;
+  margin-top: auto;
+  font-size: 22px;
+  font-weight: 600;
+}
+.card__price span {
+  margin-right: 5px;
+
+  text-decoration: line-through;
+  font-size: 18px;
+  font-weight: 600;
+  opacity: .6;
+}
+.card__btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+}
+.card__btns button {
+  border: 1px solid rgba(211, 63, 63, 0);
+  border-radius: 20px;
+   
+  
+  cursor: pointer;
+  transition: .2s linear;
+}
+.card__buy {
+  padding: 10px 40px; 
+  background: rgb(211, 63, 63);
+
+  color: #fff;
+  font-size: 18px;
+}
+.card__buy:hover {
+  background: rgb(184, 25, 25);
+}
+.card__cart {
+  padding: 10px 20px;
+  background: none;
+  
+}
+.card__cart:hover {
+  border: 1px solid rgb(211, 63, 63);
+}
+.card__add {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px 15px;
+  border-top: 1px solid rgb(214, 214, 214);
+  
+}
+.card__add img{
+  opacity: .6;
+  transition: .2s linear;
+  cursor: pointer;
+}
+.card__add img:hover {
+  opacity: 1;
+}
