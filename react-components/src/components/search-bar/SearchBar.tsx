@@ -15,14 +15,19 @@ class SearchBar extends React.Component {
     this.setState({ searchValue: localStorage.getItem('searchValue') });
   }
 
+  componentDidUpdate() {
+    localStorage.setItem('searchValue', '');
+  }
+
   render() {
     return (
       <div className="search">
         <img src={search} alt="search" />
         <input
-          placeholder="search.."
+          placeholder="search..."
           value={this.state.searchValue}
           onChange={(e) => this.setState({ searchValue: e.target.value })}
+          data-testid="search-input"
         />
       </div>
     );
