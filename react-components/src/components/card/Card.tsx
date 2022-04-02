@@ -19,6 +19,7 @@ interface IProps {
 class Card extends React.Component<IProps> {
   render() {
     const { discount, photo, code, price, rating, title, video } = this.props;
+
     return (
       <div className="card">
         {discount && <div className="card__discount">-{discount}%</div>}

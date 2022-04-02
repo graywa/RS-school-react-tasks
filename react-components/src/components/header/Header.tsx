@@ -9,7 +9,10 @@ class Header extends React.Component {
         <div className="container">
           <nav className="header__content">
             <NavLink to="/">Home</NavLink>
-            <NavLink to="/about">About Us</NavLink>
+            <span className="links">
+              <NavLink to="/forms">Forms</NavLink>
+              <NavLink to="/about">About Us</NavLink>
+            </span>
           </nav>
         </div>
       </header>

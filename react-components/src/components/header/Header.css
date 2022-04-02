@@ -8,6 +8,10 @@
   align-items: center;  
   padding: 15px 0;
 }
+.links {
+  display: flex;
+  gap: 20px;
+}
 a.active {
   font-weight: 600;
 }
