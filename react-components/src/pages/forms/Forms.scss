@@ -1,11 +1,13 @@
 .forms {
+  max-width: 700px;
+  margin: auto;
   padding: 10px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   padding: 30px;
   border: 1px solid rgb(177, 177, 177);
 
@@ -28,5 +30,6 @@
 
   button {
     padding: 5px;
+    cursor: pointer;
   }
 }
