@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions in form input name 1`] = `
+<input
+  id="name"
+  name="name"
+  type="text"
+/>
+`;

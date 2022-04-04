@@ -1,0 +1,36 @@
+.user {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 250px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px 2px #ebebeb;
+
+  &__photo {
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      margin: auto;
+    }
+  }
+
+  &__name {
+  }
+
+  &__date {
+  }
+
+  &__city {
+  }
+
+  &__sex {
+  }
+  span {
+    font-weight: 600;
+  }
+}
+

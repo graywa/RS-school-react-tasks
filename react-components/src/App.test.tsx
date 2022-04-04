@@ -71,6 +71,7 @@ describe('events', () => {
     );
     userEvent.type(screen.getByRole('textbox'), ' World');
     expect(screen.queryByDisplayValue('Hello World')).toBeInTheDocument();
+    screen.debug();
   });
 
   test('click on about link', () => {

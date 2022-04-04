@@ -1,13 +1,14 @@
 import React from 'react';
 import './Forms.scss';
+import download from './assets/Download.svg';
+import Users from '../../components/users/Users';
 
-interface IUser {
+export interface IUser {
   name: string;
   date: string;
   city: string;
   sex: string;
   photo: File;
-  check: boolean;
 }
 
 interface IState {
@@ -40,9 +41,14 @@ class Forms extends React.Component {
   womenRef: React.RefObject<HTMLInputElement> = React.createRef();
   photoRef: React.RefObject<HTMLInputElement> = React.createRef();
   checkRef: React.RefObject<HTMLInputElement> = React.createRef();
+  formRef: React.RefObject<HTMLFormElement> = React.createRef();
 
   getSex = () => {
-    return this.menRef.current?.checked ? 'men' : this.womenRef.current?.checked ? 'women' : '';
+    return this.menRef.current?.checked
+      ? 'мужской'
+      : this.womenRef.current?.checked
+      ? 'женский'
+      : '';
   };
 
   state: IState = initialState;
@@ -51,7 +57,7 @@ class Forms extends React.Component {
     if (this.nameRef.current?.value) {
       this.setState({ nameError: '', formError: false });
     } else {
-      this.setState({ nameError: 'введите ваше ', formError: false });
+      this.setState({ nameError: 'введите ваше имя', formError: false });
     }
   };
 
@@ -92,7 +98,7 @@ class Forms extends React.Component {
     if (this.checkRef.current?.checked) {
       this.setState({ checkError: '', formError: false });
     } else {
-      this.setState({ checkError: 'выберите ваш город', formError: false });
+      this.setState({ checkError: 'отметьте согласие', formError: false });
     }
   };
 
@@ -106,7 +112,7 @@ class Forms extends React.Component {
       checkError = '';
 
     if (!this.nameRef.current?.value) {
-      nameError = 'введите ваше ';
+      nameError = 'введите ваше имя';
     }
     if (!this.dateRef.current?.value) {
       dateError = 'выберите дату поступления';
@@ -153,29 +159,14 @@ class Forms extends React.Component {
               city: this.cityRef.current?.value,
               sex: sex,
               photo: this.photoRef.current?.files?.[0],
-              check: this.checkRef.current?.checked,
             },
           ],
-          formError,
+          formError: true,
         });
 
     if (!formError) {
-      this.resetForm();
+      this.formRef.current?.reset();
     }
-  };
-
-  resetForm = () => {
-    if (this.nameRef.current?.value) {
-      this.nameRef.current.value = '';
-    }
-
-    this.dateRef.current!.value = '';
-    this.cityRef.current!.value = '';
-    this.menRef.current!.checked = false;
-    this.womenRef.current!.checked = false;
-    this.nameRef.current!.value = '';
-    this.photoRef.current!.files = null;
-    this.checkRef.current!.checked = false;
   };
 
   handleSubmit = (e: React.SyntheticEvent) => {
@@ -186,45 +177,64 @@ class Forms extends React.Component {
 
   render() {
     console.log(this.state);
+    let url = '';
+    if (this.photoRef.current?.files?.[0]) {
+      url = URL.createObjectURL(this.photoRef?.current?.files?.[0]);
+    }
+
+    console.log('render forms');
+
     return (
       <div className="forms">
-        <form className="form" action="/" onSubmit={this.handleSubmit}>
+        <form ref={this.formRef} className="form" action="/" onSubmit={this.handleSubmit}>
           <h2>Регистрация</h2>
           <div className="form__name">
-            <label htmlFor="name">Ваше имя: </label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              ref={this.nameRef}
-              onChange={this.handleNameChange}
-            />
+            <label htmlFor="name">
+              Ваше имя:
+              <input
+                id="name"
+                type="text"
+                name="name"
+                ref={this.nameRef}
+                onChange={this.handleNameChange}
+              />
+              {this.state.nameError && <div className="form__error">{this.state.nameError}</div>}
+            </label>
           </div>
-          {this.state.nameError && <div className="form__error">{this.state.nameError}</div>}
 
           <div className="form__date">
-            <label htmlFor="date">Дата поступления: </label>
-            <input type="date" name="date" ref={this.dateRef} onChange={this.handleDateChange} />
-            {this.state.dateError && <div className="form__error">{this.state.dateError}</div>}
+            <label htmlFor="date">
+              Дата поступления:
+              <input
+                id="date"
+                type="date"
+                name="date"
+                ref={this.dateRef}
+                onChange={this.handleDateChange}
+              />
+              {this.state.dateError && <div className="form__error">{this.state.dateError}</div>}
+            </label>
           </div>
 
           <div className="form__sity">
-            <label htmlFor="city">Ваш город: </label>
-            <select id="city" name="city" ref={this.cityRef} onChange={this.handleCityChange}>
-              <option></option>
-              <option value="Минск">Минск</option>
-              <option value="Гомель">Гомель</option>
-              <option value="Брест">Брест</option>
-              <option value="Гродно">Гродно</option>
-              <option value="Могилев">Могилев</option>
-              <option value="Витебск">Витебск</option>
-            </select>
-            {this.state.cityError && <div className="form__error">{this.state.cityError}</div>}
+            <label htmlFor="city">
+              Ваш город:
+              <select id="city" name="city" ref={this.cityRef} onChange={this.handleCityChange}>
+                <option></option>
+                <option value="Минск">Минск</option>
+                <option value="Гомель">Гомель</option>
+                <option value="Брест">Брест</option>
+                <option value="Гродно">Гродно</option>
+                <option value="Могилев">Могилев</option>
+                <option value="Витебск">Витебск</option>
+              </select>
+              {this.state.cityError && <div className="form__error">{this.state.cityError}</div>}
+            </label>
           </div>
 
           <div className="form__sex">
             Ваш пол:
-            <div>
+            <div className="form__sex-item">
               <input
                 id="men"
                 type="radio"
@@ -234,7 +244,7 @@ class Forms extends React.Component {
               />
               <label htmlFor="men">Мужской</label>
             </div>
-            <div>
+            <div className="form__sex-item">
               <input
                 id="women"
                 type="radio"
@@ -242,14 +252,24 @@ class Forms extends React.Component {
                 ref={this.womenRef}
                 onChange={this.handleSexChange}
               />
-              <label htmlFor="women">Женский</label>
+              <label htmlFor="women">
+                Женский
+                {this.state.sexError && (
+                  <div className="form__error sex">{this.state.sexError}</div>
+                )}
+              </label>
             </div>
-            {this.state.sexError && <div className="form__error">{this.state.sexError}</div>}
           </div>
 
-          <input type="file" id="photo" ref={this.photoRef} onChange={this.handlePhotoChange} />
-          <label htmlFor="photo">Выбрать фото</label>
-          {this.state.photoError && <div className="form__error">{this.state.photoError}</div>}
+          <div className="form__photo">
+            <input type="file" id="photo" ref={this.photoRef} onChange={this.handlePhotoChange} />
+            <label htmlFor="photo">
+              Выбрать фото
+              <img width={20} src={download} alt="download" />
+              {url && <img width={40} src={url} alt="photo" />}
+              {this.state.photoError && <div className="form__error">{this.state.photoError}</div>}
+            </label>
+          </div>
 
           <div className="form__check">
             <input
@@ -259,40 +279,17 @@ class Forms extends React.Component {
               ref={this.checkRef}
               onChange={this.handleCheckChange}
             />
-            <label htmlFor="check">Согласен на обработку данных</label>
-            {this.state.checkError && <div className="form__error">{this.state.checkError}</div>}
+            <label htmlFor="check">
+              Согласен на обработку данных
+              {this.state.checkError && <div className="form__error">{this.state.checkError}</div>}
+            </label>
           </div>
           <button type="submit" disabled={this.state.formError}>
             Зарегистрироваться
           </button>
         </form>
 
-        <div className="users">
-          {this.state.users.length
-            ? this.state.users.map((el, ind) => {
-                const url = URL.createObjectURL(el?.photo);
-                return (
-                  <div key={ind} className="user">
-                    <div className="user__photo">
-                      <img width={150} height={150} src={url} alt="photo" />
-                    </div>
-                    <div className="user__name">
-                      <span>Имя: </span> {el.name}
-                    </div>
-                    <div className="user__date">
-                      <span>Дата поступления: </span> {el.date}
-                    </div>
-                    <div className="user__city">
-                      <span>Город: </span> {el.city}
-                    </div>
-                    <div className="user__sex">
-                      <span>Пол: </span> {el.sex}
-                    </div>
-                  </div>
-                );
-              })
-            : 'Пользователи отсутствуют'}
-        </div>
+        <Users users={this.state.users} />
       </div>
     );
   }
