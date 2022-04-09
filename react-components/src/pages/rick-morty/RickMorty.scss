@@ -1,0 +1,59 @@
+.content {
+  background:linear-gradient(to top, rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)), url('./assets/mosaic.jpg') repeat center/30%;
+  padding: 108px 25px 20px;  
+  min-height: 100vh;
+}
+.items {
+  padding: 50px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 50px;
+}
+.item {
+    overflow: hidden;
+    position: relative;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 0 12px 2px #ebebeb;
+    transition: .2s linear;
+    cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 12px 2px #c0c0c0;
+  }
+  &__desc {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    span {
+      font-weight: 600;
+    }
+  }
+}
+.item-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.699);
+  transition: .2s linear;
+  visibility: hidden;
+  opacity: 0;  
+  &.open {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+.modal__content {
+  padding: 20px;
+  background: #fff;
+}

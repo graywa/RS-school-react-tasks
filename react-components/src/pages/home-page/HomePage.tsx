@@ -8,7 +8,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <div className="home-page">
-        <SearchBar />
+        <SearchBar setChars={() => {}} getChars={() => {}} />
         <Cards />
       </div>
     );

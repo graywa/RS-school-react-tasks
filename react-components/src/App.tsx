@@ -4,12 +4,7 @@ import AppRouter from './components/app-router/AppRouter';
 import Header from './components/header/Header';
 
 class App extends React.Component {
-  componentDidMount() {
-    localStorage.setItem('searchValue', '');
-  }
-
   render() {
-    console.log('render app');
     return (
       <div className="app">
         <Header />
