@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import App from '../../App';
 import AppRouter from '../app-router/AppRouter';
 
-export const renderWidthRouter = (component: JSX.Element, initRoute = '/') => {
+export const renderWidthRouter = (component: JSX.Element | null, initRoute = '/') => {
   return render(
     <MemoryRouter initialEntries={[initRoute]}>
       {/* <AppRouter /> */}

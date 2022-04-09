@@ -10,6 +10,7 @@ class Header extends React.Component {
           <nav className="header__content">
             <NavLink to="/">Home</NavLink>
             <span className="links">
+              <NavLink to="/rick-morty">Rick and Morty</NavLink>
               <NavLink to="/forms">Forms</NavLink>
               <NavLink to="/about">About Us</NavLink>
             </span>

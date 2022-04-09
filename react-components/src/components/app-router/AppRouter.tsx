@@ -4,6 +4,7 @@ import AboutUs from '../../pages/about-us/AboutUs';
 import Forms from '../../pages/forms/Forms';
 import HomePage from '../../pages/home-page/HomePage';
 import Page404 from '../../pages/page-404/Page404';
+import RickMorty from '../../pages/rick-morty/RickMorty';
 
 class AppRouter extends React.Component {
   render() {
@@ -12,6 +13,7 @@ class AppRouter extends React.Component {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/forms" element={<Forms />} />
+        <Route path="/rick-morty" element={<RickMorty />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     );

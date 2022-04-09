@@ -176,13 +176,10 @@ class Forms extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     let url = '';
     if (this.photoRef.current?.files?.[0]) {
       url = URL.createObjectURL(this.photoRef?.current?.files?.[0]);
     }
-
-    console.log('render forms');
 
     return (
       <div className="forms">
