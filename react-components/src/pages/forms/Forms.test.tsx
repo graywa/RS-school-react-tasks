@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import App from '../../App';
 import { renderWidthRouter } from '../../components/tests-helpers/renderWithRouter';
-import { debug } from 'console';
 import User from '../../components/user/User';
 
 describe('render', () => {

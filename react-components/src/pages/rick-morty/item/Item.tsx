@@ -9,6 +9,9 @@ interface IProps {
   type: string;
   gender: string;
   image: string;
+  location: {
+    name: string;
+  };
 }
 
 class Item extends React.Component<IProps> {
@@ -17,25 +20,26 @@ class Item extends React.Component<IProps> {
   };
 
   render() {
-    console.log(this.state.isModalOpen);
-    const { name, species, gender, status, image, type } = this.props;
+    const { name, species, gender, status, image, type, location } = this.props;
     return (
-      <div className="item" onClick={() => this.setState({ isModalOpen: true })}>
-        <div>
-          <img width={250} src={image} alt="image" />
-        </div>
-        <div className="item__desc">
+      <>
+        <div className="item" onClick={() => this.setState({ isModalOpen: true })}>
           <div>
-            <span>Name: </span>
-            {name}
+            <img width={250} src={image} alt="image" />
           </div>
-          <div>
-            <span>Specias: </span>
-            {species}
-          </div>
-          <div>
-            <span>Gender: </span>
-            {gender}
+          <div className="item__desc">
+            <div>
+              <span>Name: </span>
+              {name}
+            </div>
+            <div>
+              <span>Specias: </span>
+              {species}
+            </div>
+            <div>
+              <span>Gender: </span>
+              {gender}
+            </div>
           </div>
         </div>
 
@@ -43,14 +47,14 @@ class Item extends React.Component<IProps> {
           className={this.state.isModalOpen ? 'item-modal open' : 'item-modal'}
           onClick={() => this.setState({ isModalOpen: false })}
         >
-          <div className="modal__cross" onClick={() => this.setState({ isModalOpen: false })}>
-            <img src={cross} alt="cross" />
-          </div>
           <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-            <div>
-              <img width={250} src={image} alt="image" />
+            <div className="modal__cross" onClick={() => this.setState({ isModalOpen: false })}>
+              <img width={40} src={cross} alt="cross" />
             </div>
-            <div className="item__desc">
+            <div>
+              <img width={380} src={image} alt="image" />
+            </div>
+            <div className="modal__desc">
               <div>
                 <span>Name: </span>
                 {name}
@@ -63,10 +67,22 @@ class Item extends React.Component<IProps> {
                 <span>Gender: </span>
                 {gender}
               </div>
+              <div>
+                <span>Status: </span>
+                {status}
+              </div>
+              <div>
+                <span>Location: </span>
+                {location.name}
+              </div>
+              <div>
+                <span>Type: </span>
+                {type}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -1,19 +1,19 @@
+import axios from 'axios';
 import { baseUrl } from './api';
 
 export const rickMortyApi = {
-  getCharacters() {
-    return fetch(baseUrl)
-      .then((response) => response.json())
-      .then((data) => data.results);
+  async getCharacters() {
+    const response = await axios.get(baseUrl);
+    return response.data.results;
   },
-  getCharacter(id: number) {
-    return fetch(baseUrl + '/' + id)
-      .then((response) => response.json())
-      .then((data) => data.results);
+  async getCharacter(id: number) {
+    const response = await axios.get(baseUrl + '/' + id);
+    return response.data.results;
   },
-  searchCharactersByName(name: string) {
-    return fetch(`${baseUrl}/?name=${name}`)
-      .then((response) => response.json())
-      .then((data) => data.results);
+  async searchCharactersByName(name: string) {
+    const response = await axios.get(`${baseUrl}/?name=${name}`);
+    return response.data.results;
   },
 };
+
+export default rickMortyApi;

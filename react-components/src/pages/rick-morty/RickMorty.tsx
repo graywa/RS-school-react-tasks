@@ -13,11 +13,15 @@ export type character = {
   type: string;
   gender: string;
   image: string;
+  location: {
+    name: string;
+  };
 };
 
 class RickMorty extends React.Component {
   state = {
     isLoading: false,
+    errorMessage: '',
     characters: [] as character[],
   };
 
@@ -32,27 +36,25 @@ class RickMorty extends React.Component {
   async componentDidMount() {
     try {
       this.setState({ isLoading: true });
-      setTimeout(() => {
-        rickMortyApi.getCharacters().then((characters) => {
-          this.setState({ characters: characters, isLoading: false });
-        });
-      }, 1000);
+      const data = await rickMortyApi.getCharacters();
+      this.setState({ characters: data, isLoading: false, errorMessage: '' });
     } catch (e) {
+      console.log(e);
       if (typeof e === 'string') {
-        console.log(e.toUpperCase());
       } else if (e instanceof Error) {
-        console.log(e.message);
+        this.setState({ errorMessage: e.message, isLoading: false });
       }
     }
   }
 
   render() {
-    const isLoading = this.state.isLoading;
+    const { isLoading, errorMessage } = this.state;
 
     return (
       <div className="content">
         <SearchBar getChars={this.getChars} setChars={this.setChars} />
         {isLoading && <Preloader />}
+        {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
         <Items characters={this.state.characters} />
       </div>
     );

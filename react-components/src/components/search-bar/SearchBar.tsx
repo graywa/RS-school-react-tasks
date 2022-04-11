@@ -14,15 +14,14 @@ class SearchBar extends React.Component<IProps> {
     searchValue: '',
   };
 
-  handleSubmit = (event: React.SyntheticEvent) => {
+  handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const { getChars, setChars } = this.props;
     const name = this.state.searchValue;
     try {
       getChars();
-      setTimeout(() => {
-        rickMortyApi.searchCharactersByName(name).then((characters) => setChars(characters));
-      }, 1000);
+      const characters = await rickMortyApi.searchCharactersByName(name);
+      setChars(characters);
     } catch (e) {
       if (typeof e === 'string') {
         e.toUpperCase();
