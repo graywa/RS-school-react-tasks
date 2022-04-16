@@ -2,22 +2,20 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AboutUs from '../../pages/about-us/AboutUs';
 import Forms from '../../pages/forms/Forms';
-import HomePage from '../../pages/home-page/HomePage';
+import StaticCards from '../../pages/static-cards/StaticCards';
 import Page404 from '../../pages/page-404/Page404';
 import RickMorty from '../../pages/rick-morty/RickMorty';
 
-class AppRouter extends React.Component {
-  render() {
-    return (
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/forms" element={<Forms />} />
-        <Route path="/rick-morty" element={<RickMorty />} />
-        <Route path="*" element={<Page404 />} />
-      </Routes>
-    );
-  }
+function AppRouter() {
+  return (
+    <Routes>
+      <Route path="/" element={<RickMorty />} />
+      <Route path="/cards" element={<StaticCards />} />
+      <Route path="/about" element={<AboutUs />} />
+      <Route path="/forms" element={<Forms />} />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
+  );
 }
 
 export default AppRouter;

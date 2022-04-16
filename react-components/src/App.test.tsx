@@ -8,7 +8,7 @@ import App from './App';
 import SearchBar from './components/search-bar/SearchBar';
 import userEvent from '@testing-library/user-event';
 import Cards from './components/cards/Cards';
-import HomePage from './pages/home-page/HomePage';
+import StaticCards from './pages/static-cards/StaticCards';
 
 describe('render', () => {
   test('render page 404', () => {
@@ -143,7 +143,7 @@ describe('mock localStorage', () => {
   test('getItem from localStorage', () => {
     render(
       <BrowserRouter>
-        <HomePage />
+        <StaticCards />
       </BrowserRouter>
     );
     expect(screen.getByDisplayValue('No war')).toBeInTheDocument();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import './SearchBar.css';
 import search from './assets/search.svg';
 import { rickMortyApi } from '../../api/rick-morty-api';
@@ -9,15 +9,13 @@ interface IProps {
   setChars: (chars: character[]) => void;
 }
 
-class SearchBar extends React.Component<IProps> {
-  state = {
-    searchValue: '',
-  };
+function SearchBar(props: IProps) {
+  const [searchValue, setSearchValue] = useState('');
 
-  handleSubmit = async (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const { getChars, setChars } = this.props;
-    const name = this.state.searchValue;
+    const { getChars, setChars } = props;
+    const name = searchValue;
     try {
       getChars();
       const characters = await rickMortyApi.searchCharactersByName(name);
@@ -31,21 +29,19 @@ class SearchBar extends React.Component<IProps> {
     }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <div className="search">
-          <img src={search} alt="search" onClick={this.handleSubmit} />
-          <input
-            placeholder="search..."
-            value={this.state.searchValue}
-            onChange={(e) => this.setState({ searchValue: e.target.value })}
-            data-testid="search-input"
-          />
-        </div>
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="search">
+        <img src={search} alt="search" onClick={handleSubmit} />
+        <input
+          placeholder="search..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          data-testid="search-input"
+        />
+      </div>
+    </form>
+  );
 }
 
 export default SearchBar;

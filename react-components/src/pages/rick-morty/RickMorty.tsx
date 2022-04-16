@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { rickMortyApi } from '../../api/rick-morty-api';
 import Preloader from '../../components/preloader/Preloader';
 import SearchBar from '../../components/search-bar/SearchBar';
@@ -18,47 +18,47 @@ export type character = {
   };
 };
 
-class RickMorty extends React.Component {
-  state = {
-    isLoading: false,
-    errorMessage: '',
-    characters: [] as character[],
+function RickMorty() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [characters, setCharacters] = useState([] as character[]);
+
+  const getChars = () => {
+    setCharacters([]);
   };
 
-  getChars = () => {
-    this.setState({ characters: [], isLoading: true });
+  const setChars = (chars: character[]) => {
+    setCharacters(chars);
   };
 
-  setChars = (chars: character[]) => {
-    this.setState({ characters: chars, isLoading: false });
-  };
-
-  async componentDidMount() {
-    try {
-      this.setState({ isLoading: true });
-      const data = await rickMortyApi.getCharacters();
-      this.setState({ characters: data, isLoading: false, errorMessage: '' });
-    } catch (e) {
-      console.log(e);
-      if (typeof e === 'string') {
-      } else if (e instanceof Error) {
-        this.setState({ errorMessage: e.message, isLoading: false });
+  useEffect(() => {
+    const fetchChars = async () => {
+      try {
+        setIsLoading(true);
+        const data = await rickMortyApi.getCharacters();
+        setCharacters(data);
+        setIsLoading(false);
+        setErrorMessage('');
+      } catch (e) {
+        console.log(e);
+        if (typeof e === 'string') {
+        } else if (e instanceof Error) {
+          setIsLoading(false);
+          setErrorMessage(e.message);
+        }
       }
-    }
-  }
+    };
+    fetchChars();
+  }, []);
 
-  render() {
-    const { isLoading, errorMessage } = this.state;
-
-    return (
-      <div className="content">
-        <SearchBar getChars={this.getChars} setChars={this.setChars} />
-        {isLoading && <Preloader />}
-        {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
-        <Items characters={this.state.characters} />
-      </div>
-    );
-  }
+  return (
+    <div className="content">
+      <SearchBar getChars={getChars} setChars={setChars} />
+      {isLoading && <Preloader />}
+      {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
+      <Items characters={characters} />
+    </div>
+  );
 }
 
 export default RickMorty;
