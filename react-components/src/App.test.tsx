@@ -8,7 +8,7 @@ import App from './App';
 import SearchBar from './components/search-bar/SearchBar';
 import userEvent from '@testing-library/user-event';
 import Cards from './components/cards/Cards';
-import StaticCards from './pages/static-cards/StaticCards';
+import RickMorty from './pages/rick-morty/RickMorty'
 
 describe('render', () => {
   test('render page 404', () => {
@@ -23,7 +23,7 @@ describe('render', () => {
         <Header />
       </BrowserRouter>
     );
-    const homeLink = getByText(/home/i);
+    const homeLink = getByText(/Rick and Morty/i);
     expect(homeLink).toBeInTheDocument();
   });
 
@@ -134,7 +134,7 @@ describe('mock localStorage', () => {
         <App />
       </BrowserRouter>
     );
-    userEvent.click(getByText(/home/i));
+    userEvent.click(getByText(/Rick and Morty/i));
     userEvent.type(screen.getByRole('textbox'), 'No war');
     userEvent.click(getByText(/about us/i));
     expect(localStorage.getItem('searchValue')).toBe('No war');
@@ -143,7 +143,7 @@ describe('mock localStorage', () => {
   test('getItem from localStorage', () => {
     render(
       <BrowserRouter>
-        <StaticCards />
+        <RickMorty />
       </BrowserRouter>
     );
     expect(screen.getByDisplayValue('No war')).toBeInTheDocument();

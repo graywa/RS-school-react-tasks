@@ -40,7 +40,6 @@ function RickMorty() {
         setIsLoading(false);
         setErrorMessage('');
       } catch (e) {
-        console.log(e);
         if (typeof e === 'string') {
         } else if (e instanceof Error) {
           setIsLoading(false);
@@ -54,6 +53,7 @@ function RickMorty() {
   return (
     <div className="content">
       <SearchBar getChars={getChars} setChars={setChars} />
+
       {isLoading && <Preloader />}
       {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
       <Items characters={characters} />

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './SearchBar.css';
 import search from './assets/search.svg';
 import { rickMortyApi } from '../../api/rick-morty-api';
@@ -15,10 +15,10 @@ function SearchBar(props: IProps) {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const { getChars, setChars } = props;
-    const name = searchValue;
+
     try {
       getChars();
-      const characters = await rickMortyApi.searchCharactersByName(name);
+      const characters = await rickMortyApi.searchCharactersByName(searchValue);
       setChars(characters);
     } catch (e) {
       if (typeof e === 'string') {
@@ -28,6 +28,19 @@ function SearchBar(props: IProps) {
       }
     }
   };
+
+  useEffect(() => {
+    if (searchValue) {
+      localStorage.setItem('searchValue', searchValue);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    const value = localStorage.getItem('searchValue');
+    if (value) {
+      setSearchValue(value);
+    }
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>

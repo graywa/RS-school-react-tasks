@@ -13,14 +13,10 @@ function Users(props: IProps) {
     <div className="users">
       {users.length
         ? users.map((el, ind) => {
-            let url = '';
-            if (el.photo) {
-              url = URL.createObjectURL(el?.photo);
-            }
             return (
               <User
                 key={ind}
-                photo={url}
+                photo={el.photoUrl}
                 name={el.name}
                 date={el.date}
                 city={el.city}

@@ -39,17 +39,16 @@ describe('actions in form', () => {
     renderWidthRouter(<App />, '/forms');
   });
 
-  test('registration button should be disabled', () => {
+  test('registration button should be enabled in the beginning', () => {
     const button: HTMLButtonElement = screen.getByRole('button');
 
-    expect(button.disabled).toBe(true);
+    expect(button.disabled).toBe(false);
   });
 
   test('input name', () => {
     const nameInput = screen.getByLabelText('Ваше имя:');
     userEvent.type(nameInput, 'Валера');
     expect(screen.getByDisplayValue('Валера')).toBeInTheDocument();
-    expect(nameInput).toMatchSnapshot();
     //screen.debug();
   });
 
@@ -79,13 +78,13 @@ describe('actions in form', () => {
     expect(radioInput.checked).toBe(true);
   });
 
-  test('registration button should be enabled after sex chosen and disabled after press', async () => {
+  test('registration button should be enabled, and after sex chosen button should be disabled', async () => {
     const button: HTMLButtonElement = screen.getByRole('button');
     const radioInput: HTMLInputElement = screen.getByLabelText('Мужской');
 
-    await userEvent.click(radioInput);
-
     expect(button.disabled).toBe(false);
+
+    await userEvent.click(radioInput);
 
     userEvent.click(button);
 
