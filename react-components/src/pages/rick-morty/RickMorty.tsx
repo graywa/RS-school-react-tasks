@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { rickMortyApi } from '../../api/rick-morty-api';
 import Preloader from '../../components/preloader/Preloader';
 import SearchBar from '../../components/search-bar/SearchBar';
-import Items from './items/Items';
+import { StateContext } from '../../context/context';
+import Items from './characters/Characters';
 import './RickMorty.scss';
+import { SET_CHARACTERS, SET_CHARACTERS_ERROR } from '../../store/store';
 
 export type character = {
   id: number;
@@ -18,47 +20,37 @@ export type character = {
   };
 };
 
-function RickMorty() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [characters, setCharacters] = useState([] as character[]);
+const RickMorty: FC = () => {
+  const { state, dispatch } = useContext(StateContext);
 
-  const getChars = () => {
-    setCharacters([]);
-  };
-
-  const setChars = (chars: character[]) => {
-    setCharacters(chars);
-  };
+  const { characters, isLoading, errorMessage } = state;
 
   useEffect(() => {
     const fetchChars = async () => {
       try {
-        setIsLoading(true);
         const data = await rickMortyApi.getCharacters();
-        setCharacters(data);
-        setIsLoading(false);
-        setErrorMessage('');
+        dispatch({ type: SET_CHARACTERS, characters: data });
       } catch (e) {
         if (typeof e === 'string') {
         } else if (e instanceof Error) {
-          setIsLoading(false);
-          setErrorMessage(e.message);
+          dispatch({ type: SET_CHARACTERS_ERROR, message: e.message });
         }
       }
     };
     fetchChars();
   }, []);
 
+  console.log(characters);
+
   return (
     <div className="content">
-      <SearchBar getChars={getChars} setChars={setChars} />
+      <SearchBar dispatch={dispatch} />
 
       {isLoading && <Preloader />}
       {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
       <Items characters={characters} />
     </div>
   );
-}
+};
 
 export default RickMorty;

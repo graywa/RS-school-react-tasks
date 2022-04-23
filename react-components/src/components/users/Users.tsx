@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { IUser } from '../../pages/forms/Forms';
 import User from '../user/User';
 import './Users.scss';
@@ -7,8 +7,7 @@ interface IProps {
   users: IUser[];
 }
 
-function Users(props: IProps) {
-  const { users } = props;
+const Users: FC<IProps> = ({ users }) => {
   return (
     <div className="users">
       {users.length
@@ -27,6 +26,6 @@ function Users(props: IProps) {
         : 'Пользователи отсутствуют'}
     </div>
   );
-}
+};
 
 export default Users;

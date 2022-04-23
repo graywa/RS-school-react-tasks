@@ -10,6 +10,7 @@ function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<RickMorty />} />
+      <Route path="/:id" element={<DetailCharacter />} />
       <Route path="/cards" element={<StaticCards />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/forms" element={<Forms />} />

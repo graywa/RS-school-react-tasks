@@ -3,28 +3,32 @@ import './SearchBar.css';
 import search from './assets/search.svg';
 import { rickMortyApi } from '../../api/rick-morty-api';
 import { character } from '../../pages/rick-morty/RickMorty';
+import {
+  actionTypes,
+  RESET_CHARACTERS,
+  SET_CHARACTERS,
+  SET_CHARACTERS_ERROR,
+} from '../../store/store';
 
 interface IProps {
-  getChars: () => void;
-  setChars: (chars: character[]) => void;
+  dispatch: React.Dispatch<actionTypes>;
 }
 
-function SearchBar(props: IProps) {
+const SearchBar: FC<IProps> = ({ dispatch }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const { getChars, setChars } = props;
 
     try {
-      getChars();
+      dispatch({ type: RESET_CHARACTERS });
       const characters = await rickMortyApi.searchCharactersByName(searchValue);
-      setChars(characters);
+      dispatch({ type: SET_CHARACTERS, characters });
     } catch (e) {
       if (typeof e === 'string') {
         e.toUpperCase();
       } else if (e instanceof Error) {
-        e.message;
+        dispatch({ type: SET_CHARACTERS_ERROR, message: e.message });
       }
     }
   };
@@ -55,6 +59,6 @@ function SearchBar(props: IProps) {
       </div>
     </form>
   );
-}
+};
 
 export default SearchBar;

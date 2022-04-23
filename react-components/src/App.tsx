@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { FC, useReducer } from 'react';
 import './App.css';
 import AppRouter from './components/app-router/AppRouter';
 import Header from './components/header/Header';
+import { StateContext } from './context/context';
+import { initialState, reducer } from './store/store';
 
-function App() {
+const App: FC = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <div className="app">
-      <Header />
-      <div className="container">
-        <AppRouter />
-      </div>
+      <StateContext.Provider value={{ state, dispatch }}>
+        <Header />
+        <div className="container">
+          <AppRouter />
+        </div>
+      </StateContext.Provider>
     </div>
   );
-}
+};
 
 export default App;
