@@ -6,11 +6,16 @@ export const GET_CHARACTERS = 'GET_CHARACTERS';
 export const SET_CHARACTERS = 'SET_CHARACTERS';
 export const RESET_CHARACTERS = 'RESET_CHARACTERS';
 export const SET_CHARACTERS_ERROR = 'SET_CHARACTERS_ERROR';
+export const CHANGE_PAGE = 'CHANGE_PAGE';
+export const CHANGE_LIMIT_ON_PAGE = 'CHANGE_LIMIT_ON_PAGE';
 
 export const initialState = {
   characters: [] as character[],
   isLoading: false,
   errorMessage: '',
+  totalItems: 0,
+  currPage: 1,
+  limitOnPage: 20,
   users: [] as IUser[],
 };
 
@@ -28,6 +33,7 @@ type getCharactersAction = {
 type setCharactersAction = {
   type: typeof SET_CHARACTERS;
   characters: character[];
+  totalItems: number;
 };
 
 type resetCharactersAction = {
@@ -39,12 +45,24 @@ type setCharactersErrorAction = {
   message: string;
 };
 
+type changePageAction = {
+  type: typeof CHANGE_PAGE;
+  currPage: number;
+};
+
+type changeLimitOnPage = {
+  type: typeof CHANGE_LIMIT_ON_PAGE;
+  limitOnPage: number;
+};
+
 export type actionTypes =
   | addUserAction
   | getCharactersAction
   | setCharactersAction
   | resetCharactersAction
-  | setCharactersErrorAction;
+  | setCharactersErrorAction
+  | changePageAction
+  | changeLimitOnPage;
 
 export function reducer(state: initialStateType, action: actionTypes): initialStateType {
   switch (action.type) {
@@ -53,11 +71,20 @@ export function reducer(state: initialStateType, action: actionTypes): initialSt
     case GET_CHARACTERS:
       return { ...state, isLoading: true, errorMessage: '' };
     case SET_CHARACTERS:
-      return { ...state, characters: [...action.characters], isLoading: false };
+      return {
+        ...state,
+        characters: [...action.characters],
+        isLoading: false,
+        totalItems: action.totalItems,
+      };
     case RESET_CHARACTERS:
       return { ...state, characters: [], isLoading: true, errorMessage: '' };
     case SET_CHARACTERS_ERROR:
       return { ...state, errorMessage: action.message, isLoading: false };
+    case CHANGE_PAGE:
+      return { ...state, currPage: action.currPage };
+    case CHANGE_LIMIT_ON_PAGE:
+      return { ...state, limitOnPage: action.limitOnPage };
     default:
       return state;
   }

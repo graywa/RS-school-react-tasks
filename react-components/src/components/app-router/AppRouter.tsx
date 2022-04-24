@@ -5,6 +5,7 @@ import Forms from '../../pages/forms/Forms';
 import StaticCards from '../../pages/static-cards/StaticCards';
 import Page404 from '../../pages/page-404/Page404';
 import RickMorty from '../../pages/rick-morty/RickMorty';
+import DetailCharacter from '../../pages/rick-morty/characters/detail-character/DetailCharacter';
 
 function AppRouter() {
   return (

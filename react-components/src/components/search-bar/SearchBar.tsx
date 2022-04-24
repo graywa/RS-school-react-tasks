@@ -22,8 +22,13 @@ const SearchBar: FC<IProps> = ({ dispatch }) => {
 
     try {
       dispatch({ type: RESET_CHARACTERS });
-      const characters = await rickMortyApi.searchCharactersByName(searchValue);
-      dispatch({ type: SET_CHARACTERS, characters });
+      const data = await rickMortyApi.searchCharactersByName(searchValue);
+      console.log(data);
+      const {
+        results,
+        info: { count },
+      } = data;
+      dispatch({ type: SET_CHARACTERS, characters: results, totalItems: count });
     } catch (e) {
       if (typeof e === 'string') {
         e.toUpperCase();

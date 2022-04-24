@@ -55,38 +55,4 @@
     opacity: 1;
   }
 }
-.modal {
-  &__content {
-    position: relative;
-    max-width: 750px;
-    width: 100%;
-    display: flex;
-    background: #fff;
-    border-radius: 35px 0 0 35px;
-    overflow: hidden;
-    box-shadow: 3px 2px 12px 4px #000000c2;
-  }
-  &__desc {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 35px;
 
-    font-size: 20px;
-
-    span {
-      font-weight: 600;
-    }
-  }
-  &__cross {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    z-index: 10;
-    border-radius: 50%;
-
-    background: #fff;
-    cursor: pointer;
-
-  }
-}

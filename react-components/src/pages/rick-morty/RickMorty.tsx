@@ -1,11 +1,13 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { rickMortyApi } from '../../api/rick-morty-api';
 import Preloader from '../../components/preloader/Preloader';
 import SearchBar from '../../components/search-bar/SearchBar';
 import { StateContext } from '../../context/context';
-import Items from './characters/Characters';
+import Characters from './characters/Characters';
 import './RickMorty.scss';
-import { SET_CHARACTERS, SET_CHARACTERS_ERROR } from '../../store/store';
+import { GET_CHARACTERS, SET_CHARACTERS, SET_CHARACTERS_ERROR } from '../../store/store';
+import Paginator from '../../components/paginator/Paginator';
+import Selectors from '../../components/selectors/Selectors';
 
 export type character = {
   id: number;
@@ -20,16 +22,34 @@ export type character = {
   };
 };
 
-const RickMorty: FC = () => {
+const RickMorty: FC = React.memo(() => {
   const { state, dispatch } = useContext(StateContext);
 
-  const { characters, isLoading, errorMessage } = state;
+  const { characters, isLoading, errorMessage, limitOnPage, totalItems, currPage } = state;
 
   useEffect(() => {
-    const fetchChars = async () => {
+    window.scrollTo(0, 0);
+    const fetchPage = Math.ceil((limitOnPage / 20) * currPage);
+
+    const fetchChars = async (fetchPage: number) => {
       try {
-        const data = await rickMortyApi.getCharacters();
-        dispatch({ type: SET_CHARACTERS, characters: data });
+        dispatch({ type: GET_CHARACTERS });
+
+        const data = await rickMortyApi.getCharacters(fetchPage);
+        let { results } = data;
+
+        const {
+          info: { count },
+        } = data;
+
+        const allowIdStart = limitOnPage * currPage - limitOnPage;
+        const allowIdEnd = limitOnPage * currPage;
+
+        results = [...results].filter((el) => {
+          return el.id > allowIdStart && el.id <= allowIdEnd;
+        });
+
+        dispatch({ type: SET_CHARACTERS, characters: results, totalItems: count });
       } catch (e) {
         if (typeof e === 'string') {
         } else if (e instanceof Error) {
@@ -37,8 +57,9 @@ const RickMorty: FC = () => {
         }
       }
     };
-    fetchChars();
-  }, []);
+
+    fetchChars(fetchPage);
+  }, [currPage, limitOnPage]);
 
   console.log(characters);
 
@@ -47,10 +68,21 @@ const RickMorty: FC = () => {
       <SearchBar dispatch={dispatch} />
 
       {isLoading && <Preloader />}
+
       {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
-      <Items characters={characters} />
+
+      <Selectors limitOnPage={limitOnPage} dispatch={dispatch} />
+
+      <Characters characters={characters} />
+
+      <Paginator
+        dispatch={dispatch}
+        limitOnPage={limitOnPage}
+        totalItems={totalItems}
+        currPage={currPage}
+      />
     </div>
   );
-};
+});
 
 export default RickMorty;

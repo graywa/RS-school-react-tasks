@@ -1,0 +1,26 @@
+.pages {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+
+  background: #f7f7f7;
+  border-radius: 10px;
+
+}
+.page {
+  padding: 5px 5px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.current {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
