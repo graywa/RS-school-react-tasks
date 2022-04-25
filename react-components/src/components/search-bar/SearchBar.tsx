@@ -1,34 +1,45 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import './SearchBar.css';
 import search from './assets/search.svg';
 import { rickMortyApi } from '../../api/rick-morty-api';
-import { character } from '../../pages/rick-morty/RickMorty';
 import {
   actionTypes,
-  RESET_CHARACTERS,
+  CHANGE_PAGE,
+  GET_CHARACTERS,
   SET_CHARACTERS,
   SET_CHARACTERS_ERROR,
+  SET_SEARCH_VALUE,
 } from '../../store/store';
 
 interface IProps {
+  limitOnPage: number;
+  searchValue: string;
+  status: string;
   dispatch: React.Dispatch<actionTypes>;
 }
 
-const SearchBar: FC<IProps> = ({ dispatch }) => {
-  const [searchValue, setSearchValue] = useState('');
-
+const SearchBar: FC<IProps> = ({ searchValue, limitOnPage, status, dispatch }) => {
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     try {
-      dispatch({ type: RESET_CHARACTERS });
-      const data = await rickMortyApi.searchCharactersByName(searchValue);
-      console.log(data);
+      dispatch({ type: GET_CHARACTERS });
+
+      const data = await rickMortyApi.searchCharactersByFilter(1, searchValue, status);
+
+      let { results } = data;
+
       const {
-        results,
         info: { count },
       } = data;
+
+      const allowIndStart = 0;
+      const allowIndEnd = limitOnPage;
+
+      results = [...results].slice(allowIndStart, allowIndEnd);
+
       dispatch({ type: SET_CHARACTERS, characters: results, totalItems: count });
+      dispatch({ type: CHANGE_PAGE, currPage: 1 });
     } catch (e) {
       if (typeof e === 'string') {
         e.toUpperCase();
@@ -38,19 +49,6 @@ const SearchBar: FC<IProps> = ({ dispatch }) => {
     }
   };
 
-  useEffect(() => {
-    if (searchValue) {
-      localStorage.setItem('searchValue', searchValue);
-    }
-  }, [searchValue]);
-
-  useEffect(() => {
-    const value = localStorage.getItem('searchValue');
-    if (value) {
-      setSearchValue(value);
-    }
-  }, []);
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="search">
@@ -58,7 +56,7 @@ const SearchBar: FC<IProps> = ({ dispatch }) => {
         <input
           placeholder="search..."
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e) => dispatch({ type: SET_SEARCH_VALUE, searchValue: e.target.value })}
           data-testid="search-input"
         />
       </div>

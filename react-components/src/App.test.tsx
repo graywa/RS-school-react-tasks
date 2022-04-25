@@ -8,7 +8,7 @@ import App from './App';
 import SearchBar from './components/search-bar/SearchBar';
 import userEvent from '@testing-library/user-event';
 import Cards from './components/cards/Cards';
-import RickMorty from './pages/rick-morty/RickMorty'
+import RickMorty from './pages/rick-morty/RickMorty';
 
 describe('render', () => {
   test('render page 404', () => {
@@ -85,7 +85,9 @@ describe('events', () => {
   });
 
   test('focus on input', () => {
-    const { getByTestId } = render(<SearchBar dispatch={() => {}} />);
+    const { getByTestId } = render(
+      <SearchBar status={''} searchValue={''} limitOnPage={20} dispatch={() => {}} />
+    );
     const input = getByTestId('search-input');
     expect(input).not.toHaveFocus();
     input.focus();

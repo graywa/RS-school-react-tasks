@@ -1,5 +1,5 @@
 .detail {
-  padding-top: 100px;
+  padding-top: 120px;
   min-height: 100vh;
   background: linear-gradient(to top, rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)),
   url('../../assets/mosaic.jpg') repeat center/30%;
@@ -13,6 +13,12 @@
     background: #fff;
     border-radius: 35px 0 0 35px;
     overflow: hidden;
+    box-shadow: 0 0 12px 2px #ebebeb;
+
+    @media (max-width: 900px) {
+      max-width: 380px;
+      flex-direction: column;
+    }
   }
   &__desc {
     display: flex;
@@ -20,6 +26,7 @@
     gap: 20px;
     padding: 35px;
     font-size: 20px;
+    
 
     span {
       font-weight: 600;
@@ -31,7 +38,7 @@
 
     a {
       position: relative;
-      padding: 15px 20px 15px 50px;
+      padding: 10px 20px 10px 50px;
       background: #fff;
       border-radius: 10px;      
       font-size: 20px;
@@ -45,7 +52,7 @@
 
     img {
       position: absolute;
-      top: 10px;
+      top: 5px;
       left: 10px;
       z-index: 5;
     }

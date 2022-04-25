@@ -1,9 +1,11 @@
 .content {
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)),
-    url('./assets/mosaic.jpg') repeat center/30%;
-  padding: 108px 25px 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 130px 25px 20px;
   min-height: 100vh;
   box-shadow: 3px 2px 10px 2px #c0c0c073;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)),
+  url('./assets/mosaic.jpg') repeat center/30%;
 }
 .items {
   padding: 50px 0;

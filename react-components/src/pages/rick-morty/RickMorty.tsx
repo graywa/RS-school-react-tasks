@@ -25,7 +25,17 @@ export type character = {
 const RickMorty: FC = React.memo(() => {
   const { state, dispatch } = useContext(StateContext);
 
-  const { characters, isLoading, errorMessage, limitOnPage, totalItems, currPage } = state;
+  const {
+    characters,
+    searchValue,
+    isLoading,
+    errorMessage,
+    limitOnPage,
+    status,
+    sort,
+    totalItems,
+    currPage,
+  } = state;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,19 +45,17 @@ const RickMorty: FC = React.memo(() => {
       try {
         dispatch({ type: GET_CHARACTERS });
 
-        const data = await rickMortyApi.getCharacters(fetchPage);
+        const data = await rickMortyApi.searchCharactersByFilter(fetchPage, searchValue, status);
         let { results } = data;
 
         const {
           info: { count },
         } = data;
 
-        const allowIdStart = limitOnPage * currPage - limitOnPage;
-        const allowIdEnd = limitOnPage * currPage;
+        const allowIndEnd = (currPage - (fetchPage - 1) * (20 / limitOnPage)) * limitOnPage;
+        const allowIndStart = allowIndEnd - limitOnPage;
 
-        results = [...results].filter((el) => {
-          return el.id > allowIdStart && el.id <= allowIdEnd;
-        });
+        results = [...results].slice(allowIndStart, allowIndEnd);
 
         dispatch({ type: SET_CHARACTERS, characters: results, totalItems: count });
       } catch (e) {
@@ -59,21 +67,30 @@ const RickMorty: FC = React.memo(() => {
     };
 
     fetchChars(fetchPage);
-  }, [currPage, limitOnPage]);
-
-  console.log(characters);
+  }, [currPage, limitOnPage, status]);
 
   return (
     <div className="content">
-      <SearchBar dispatch={dispatch} />
+      <SearchBar
+        status={status}
+        searchValue={searchValue}
+        limitOnPage={limitOnPage}
+        dispatch={dispatch}
+      />
 
       {isLoading && <Preloader />}
 
       {errorMessage && <div className="error">`Ошибка: ${errorMessage}`</div>}
 
-      <Selectors limitOnPage={limitOnPage} dispatch={dispatch} />
+      <Selectors
+        limitOnPage={limitOnPage}
+        status={status}
+        sort={sort}
+        currPage={currPage}
+        dispatch={dispatch}
+      />
 
-      <Characters characters={characters} />
+      <Characters sort={sort} characters={characters} />
 
       <Paginator
         dispatch={dispatch}

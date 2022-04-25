@@ -5,12 +5,23 @@
   position: fixed;
   background: #f7f7f7;
   z-index: 5;
+
+  &__location {
+    font-size: 14px;
+    padding: 0 20px 5px 20px;
+    
+    span {
+      font-weight: 600;
+    }
+  }
 }
 .header__content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 20px;
+
+  font-size: 20px;
 
   a.active {
     font-weight: 600;

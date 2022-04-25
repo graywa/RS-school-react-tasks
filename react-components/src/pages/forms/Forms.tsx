@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import './Forms.scss';
 import download from './assets/Download.svg';
 import Users from '../../components/users/Users';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { StateContext } from '../../context/context';
+import { ADD_USER } from '../../store/store';
 
 interface IFormData {
   name: string;
@@ -46,8 +48,10 @@ const schema = yup.object().shape({
   check: yup.boolean().oneOf([true], 'Необходимо отметить').required('Обязательно поле'),
 });
 
-function Forms() {
-  const [users, setUsers] = useState([] as IUser[]);
+const Forms: FC = () => {
+  const { state, dispatch } = useContext(StateContext);
+
+  const { userName, date, city, sex, photo } = state;
 
   const {
     register,
@@ -59,9 +63,12 @@ function Forms() {
     resolver: yupResolver(schema),
   });
 
+  //console.log(formState);
+
   const onSubmit: SubmitHandler<IFormData> = ({ name, date, city, sex, photo }: IFormData) => {
     const photoUrl = URL.createObjectURL(photo![0]) || '';
-    setUsers([...users, { name, date, city, sex, photoUrl }]);
+    const user = { name, date, city, sex, photoUrl };
+    dispatch({ type: ADD_USER, user });
     reset();
   };
 
@@ -72,7 +79,7 @@ function Forms() {
         <div className="form__name">
           <label htmlFor="name">
             Ваше имя:
-            <input id="name" {...register('name')} />
+            <input id="name" defaultValue={userName} {...register('name')} />
             <div className="form__error">{errors.name?.message}</div>
           </label>
         </div>
@@ -136,9 +143,9 @@ function Forms() {
         </button>
       </form>
 
-      <Users users={users} />
+      <Users />
     </div>
   );
-}
+};
 
 export default Forms;

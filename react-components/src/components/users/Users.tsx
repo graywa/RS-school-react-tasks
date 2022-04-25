@@ -1,13 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import { StateContext } from '../../context/context';
 import { IUser } from '../../pages/forms/Forms';
 import User from '../user/User';
 import './Users.scss';
 
-interface IProps {
-  users: IUser[];
-}
+const Users: FC = () => {
+  const {
+    state: { users },
+  } = useContext(StateContext);
 
-const Users: FC<IProps> = ({ users }) => {
+  //const { users } = state;
   return (
     <div className="users">
       {users.length

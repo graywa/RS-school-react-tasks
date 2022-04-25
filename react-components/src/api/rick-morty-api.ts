@@ -14,10 +14,12 @@ export const rickMortyApi = {
     const response = await axios.get(baseUrl + '/' + id);
     return response.data.results;
   },
-  async searchCharactersByName(name: string) {
+  async searchCharactersByFilter(page = 1, name: string, status: string) {
     const response = await axios.get(baseUrl, {
       params: {
+        page,
         name,
+        status,
       },
     });
     return response.data;

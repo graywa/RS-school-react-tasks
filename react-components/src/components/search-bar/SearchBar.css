@@ -5,7 +5,7 @@
 .search input {
   width: 420px;
   padding: 10px 20px 10px 50px;
-  border: 1px solid rgb(133, 133, 133);
+  border: 1px solid rgb(200 200 200);
   border-radius: 20px;
 }
 .search img {
