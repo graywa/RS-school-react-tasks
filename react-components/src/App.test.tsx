@@ -1,7 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Page404 from './pages/page-404/Page404';
 import Header from './components/header/Header';
 import Card from './components/card/Card';
 import App from './App';
@@ -9,6 +8,7 @@ import SearchBar from './components/search-bar/SearchBar';
 import userEvent from '@testing-library/user-event';
 import Cards from './components/cards/Cards';
 import RickMorty from './pages/rick-morty/RickMorty';
+import Page404 from './pages/page-404/Page404';
 
 describe('render', () => {
   test('render page 404', () => {
