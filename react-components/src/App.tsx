@@ -1,13 +1,12 @@
-import React, { FC, useEffect, useReducer } from 'react';
+import React, { FC, useEffect } from 'react';
+import { Provider } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import './App.css';
 import AppRouter from './components/app-router/AppRouter';
 import Header from './components/header/Header';
-import { StateContext } from './context/context';
-import { initialState, reducer } from './store/store';
+import { store } from './store/redux-store';
 
 const App: FC = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -16,12 +15,12 @@ const App: FC = () => {
 
   return (
     <div className="app">
-      <StateContext.Provider value={{ state, dispatch }}>
+      <Provider store={store}>
         <Header />
         <div className="container">
           <AppRouter />
         </div>
-      </StateContext.Provider>
+      </Provider>
     </div>
   );
 };

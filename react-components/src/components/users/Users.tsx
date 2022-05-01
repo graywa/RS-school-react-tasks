@@ -1,15 +1,11 @@
-import React, { FC, useContext } from 'react';
-import { StateContext } from '../../context/context';
-import { IUser } from '../../pages/forms/Forms';
+import React, { FC } from 'react';
+import { useAppSelector } from '../../hooks/redux-hooks';
 import User from '../user/User';
 import './Users.scss';
 
 const Users: FC = () => {
-  const {
-    state: { users },
-  } = useContext(StateContext);
+  const { users } = useAppSelector((state) => state.users);
 
-  //const { users } = state;
   return (
     <div className="users">
       {users.length

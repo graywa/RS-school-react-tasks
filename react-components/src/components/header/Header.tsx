@@ -1,15 +1,14 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { StateContext } from '../../context/context';
+import { useAppSelector } from '../../hooks/redux-hooks';
 import './Header.scss';
 
 const Header: FC = () => {
   const { pathname } = useLocation();
   let currLocation = '';
   let idChar = 0;
-  const { state } = useContext(StateContext);
 
-  const { characters } = state;
+  const { characters } = useAppSelector((state) => state.characters);
 
   switch (pathname) {
     case '/':

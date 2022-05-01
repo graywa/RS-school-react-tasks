@@ -85,9 +85,7 @@ describe('events', () => {
   });
 
   test('focus on input', () => {
-    const { getByTestId } = render(
-      <SearchBar status={''} searchValue={''} limitOnPage={20} dispatch={() => {}} />
-    );
+    const { getByTestId } = render(<SearchBar status={''} searchValue={''} />);
     const input = getByTestId('search-input');
     expect(input).not.toHaveFocus();
     input.focus();

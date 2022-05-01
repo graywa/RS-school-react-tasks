@@ -1,4 +1,12 @@
 import React, { ChangeEvent, FC } from 'react';
+import { useAppDispatch } from '../../hooks/redux-hooks';
+import { getCharactersByFilter } from '../../store/AsyncActionCreators';
+import {
+  changeLimitOnPage,
+  changeCurrPage,
+  changeStatus,
+  changeSort,
+} from '../../store/charactersSlice';
 import { actionTypes, CHANGE_LIMIT_ON_PAGE, CHANGE_SORT, CHANGE_STATUS } from '../../store/store';
 import './Selectors.scss';
 
@@ -6,19 +14,40 @@ interface IProps {
   limitOnPage: number;
   status: string;
   sort: 'name' | 'gender' | 'status' | 'species' | '';
-  currPage: number;
-  dispatch: React.Dispatch<actionTypes>;
+  searchValue: string;
 }
 
-const Selectors: FC<IProps> = ({ limitOnPage = 20, status, sort, dispatch, currPage }) => {
+const Selectors: FC<IProps> = ({ limitOnPage = 20, status, sort, searchValue }) => {
+  const dispatch = useAppDispatch();
+
   const changeLimit = (e: ChangeEvent<HTMLSelectElement>) => {
     const updLimitOnPage = Number(e.target.value);
-    const updCurrPage = Math.ceil((currPage * limitOnPage) / updLimitOnPage);
-    dispatch({
-      type: CHANGE_LIMIT_ON_PAGE,
-      limitOnPage: updLimitOnPage,
-      currPage: updCurrPage,
-    });
+
+    dispatch(changeLimitOnPage(updLimitOnPage));
+    dispatch(getCharactersByFilter({ fetchPage: 1, searchValue, status }));
+    dispatch(changeCurrPage(1));
+  };
+
+  const handleChangeStatus = (e: ChangeEvent<HTMLSelectElement>) => {
+    const updStatus = e.target.value;
+    dispatch(changeStatus(updStatus));
+    dispatch(getCharactersByFilter({ fetchPage: 1, searchValue, status: updStatus }));
+    dispatch(changeCurrPage(1));
+  };
+
+  const handleChangeSort = (e: ChangeEvent<HTMLSelectElement>) => {
+    const updSort = e.target.value;
+
+    if (
+      updSort === 'name' ||
+      updSort === 'gender' ||
+      updSort === 'name' ||
+      updSort === 'status' ||
+      updSort === 'species' ||
+      updSort === ''
+    ) {
+      dispatch(changeSort(updSort));
+    }
   };
 
   return (
@@ -37,15 +66,7 @@ const Selectors: FC<IProps> = ({ limitOnPage = 20, status, sort, dispatch, currP
       <div className="selector">
         <label>
           {`Выберите статус персонажа: `}
-          <select
-            value={status}
-            onChange={(e) => {
-              dispatch({
-                type: CHANGE_STATUS,
-                status: e.target.value,
-              });
-            }}
-          >
+          <select value={status} onChange={(e) => handleChangeStatus(e)}>
             <option value=""></option>
             <option value="alive">жив</option>
             <option value="dead">мертв</option>
@@ -57,25 +78,7 @@ const Selectors: FC<IProps> = ({ limitOnPage = 20, status, sort, dispatch, currP
       <div className="selector">
         <label>
           {`Сортировать персонажей по: `}
-          <select
-            value={sort}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (
-                val === 'name' ||
-                val === 'gender' ||
-                val === 'name' ||
-                val === 'status' ||
-                val === 'species' ||
-                val === ''
-              ) {
-                dispatch({
-                  type: CHANGE_SORT,
-                  sort: val,
-                });
-              }
-            }}
-          >
+          <select value={sort} onChange={(e) => handleChangeSort(e)}>
             <option value=""></option>
             <option value="name">имени</option>
             <option value="status">статусу</option>

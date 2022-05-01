@@ -1,12 +1,12 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import './Forms.scss';
 import download from './assets/Download.svg';
 import Users from '../../components/users/Users';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { StateContext } from '../../context/context';
-import { ADD_USER } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux-hooks';
+import { addUser } from '../../store/usersSlice';
 
 interface IFormData {
   name: string;
@@ -37,6 +37,7 @@ const schema = yup.object().shape({
       if (value) {
         const currDate = new Date();
         const selectedDate = new Date(value);
+        console.log(currDate > selectedDate);
         return currDate > selectedDate;
       }
       return true;
@@ -44,33 +45,45 @@ const schema = yup.object().shape({
     .required('Обязательно поле'),
   city: yup.string().required('Обязательно поле'),
   sex: yup.string().required('Обязательно поле').nullable(),
-  photo: yup.mixed().required('Обязательно поле').nullable(),
+  photo: yup.mixed().test('fileSize', 'Выберите фото', (file) => {
+    if (file.length) {
+      return true;
+    } else {
+      return false;
+    }
+  }),
   check: yup.boolean().oneOf([true], 'Необходимо отметить').required('Обязательно поле'),
 });
 
 const Forms: FC = () => {
-  const { state, dispatch } = useContext(StateContext);
-
-  const { userName, date, city, sex, photo } = state;
+  const { userName, date, city, sex, photo } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty },
     reset,
+    setValue,
   } = useForm<IFormData>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
-
-  //console.log(formState);
 
   const onSubmit: SubmitHandler<IFormData> = ({ name, date, city, sex, photo }: IFormData) => {
     const photoUrl = URL.createObjectURL(photo![0]) || '';
     const user = { name, date, city, sex, photoUrl };
-    dispatch({ type: ADD_USER, user });
+    dispatch(addUser(user));
     reset();
   };
+
+  console.log(errors);
+
+  // const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const photoUrl = URL.createObjectURL(e.currentTarget?.files![0]) || '';
+  //   console.log(photoUrl);
+  //   setValue('photo', photoUrl);
+  // };
 
   return (
     <div className="form-wrapper">
@@ -128,6 +141,7 @@ const Forms: FC = () => {
           <label htmlFor="photo">
             Выбрать фото
             <img width={20} src={download} alt="download" />
+            <div className="form__error">{errors.photo?.message}</div>
           </label>
         </div>
 
@@ -138,9 +152,7 @@ const Forms: FC = () => {
             <div className="form__error">{errors.check?.message}</div>
           </label>
         </div>
-        <button type="submit" disabled={!isValid && isDirty}>
-          Зарегистрироваться
-        </button>
+        <button type="submit">Зарегистрироваться</button>
       </form>
 
       <Users />

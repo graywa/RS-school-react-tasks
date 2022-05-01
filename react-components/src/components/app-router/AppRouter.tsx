@@ -7,7 +7,7 @@ import Page404 from '../../pages/page-404/Page404';
 import RickMorty from '../../pages/rick-morty/RickMorty';
 import DetailCharacter from '../../pages/rick-morty/characters/detail-character/DetailCharacter';
 
-function AppRouter() {
+const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<RickMorty />} />
@@ -18,6 +18,6 @@ function AppRouter() {
       <Route path="*" element={<Page404 />} />
     </Routes>
   );
-}
+};
 
 export default AppRouter;

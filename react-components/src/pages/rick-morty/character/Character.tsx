@@ -1,30 +1,15 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import cross from '../assets/cross.svg';
 
 interface IProps {
   id: number;
   name: string;
-  status: string;
   species: string;
-  type: string;
   gender: string;
   image: string;
-  location: {
-    name: string;
-  };
 }
 
-const Character: FC<IProps> = ({
-  id,
-  name,
-  species,
-  gender,
-  status,
-  image,
-  type,
-  location,
-}: IProps) => {
+const Character: FC<IProps> = ({ id, name, species, gender, image }: IProps) => {
   return (
     <>
       <Link className="item" to={`/${id}`}>

@@ -1,15 +1,14 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { StateContext } from '../../../../context/context';
 import { character } from '../../RickMorty';
 import arrowBack from '../../assets/arrow-back.svg';
 import './DetailCharacter.scss';
+import { useAppSelector } from '../../../../hooks/redux-hooks';
 
 const DetailCharacter: FC = () => {
   const { id } = useParams();
 
-  const { state } = useContext(StateContext);
-  const { characters } = state;
+  const { characters } = useAppSelector((state) => state.characters);
 
   const character: character | undefined = characters.find((el) => el.id === Number(id));
 
