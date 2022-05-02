@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './Forms.scss';
 import download from './assets/Download.svg';
 import Users from '../../components/users/Users';
@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux-hooks';
-import { addUser } from '../../store/usersSlice';
+import { addUser, saveFiedsForm } from '../../store/usersSlice';
 
 interface IFormData {
   name: string;
@@ -37,7 +37,6 @@ const schema = yup.object().shape({
       if (value) {
         const currDate = new Date();
         const selectedDate = new Date(value);
-        console.log(currDate > selectedDate);
         return currDate > selectedDate;
       }
       return true;
@@ -45,7 +44,7 @@ const schema = yup.object().shape({
     .required('Обязательно поле'),
   city: yup.string().required('Обязательно поле'),
   sex: yup.string().required('Обязательно поле').nullable(),
-  photo: yup.mixed().test('fileSize', 'Выберите фото', (file) => {
+  photo: yup.mixed().test('hasFile', 'Выберите фото', (file) => {
     if (file.length) {
       return true;
     } else {
@@ -56,15 +55,16 @@ const schema = yup.object().shape({
 });
 
 const Forms: FC = () => {
-  const { userName, date, city, sex, photo } = useAppSelector((state) => state.users);
+  const { userName, date, city, sex, photo, check } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isDirty },
     reset,
-    setValue,
+    getValues,
   } = useForm<IFormData>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
@@ -74,16 +74,20 @@ const Forms: FC = () => {
     const photoUrl = URL.createObjectURL(photo![0]) || '';
     const user = { name, date, city, sex, photoUrl };
     dispatch(addUser(user));
+    dispatch(saveFiedsForm({ name: '', date: '', city: '', sex: '', check: false }));
     reset();
+    setIsOpenModal(true);
+    setTimeout(() => {
+      setIsOpenModal(false);
+    }, 2000);
   };
 
-  console.log(errors);
-
-  // const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const photoUrl = URL.createObjectURL(e.currentTarget?.files![0]) || '';
-  //   console.log(photoUrl);
-  //   setValue('photo', photoUrl);
-  // };
+  useEffect(() => {
+    return () => {
+      const [name, date, city, sex, check] = getValues(['name', 'date', 'city', 'sex', 'check']);
+      dispatch(saveFiedsForm({ name, date, city, sex, check }));
+    };
+  }, []);
 
   return (
     <div className="form-wrapper">
@@ -100,7 +104,7 @@ const Forms: FC = () => {
         <div className="form__date">
           <label htmlFor="date">
             Дата поступления:
-            <input id="date" type="date" {...register('date')} />
+            <input id="date" defaultValue={date} type="date" {...register('date')} />
             <div className="form__error">{errors.date?.message}</div>
           </label>
         </div>
@@ -108,8 +112,8 @@ const Forms: FC = () => {
         <div className="form__sity">
           <label htmlFor="city">
             Ваш город:
-            <select id="city" {...register('city')}>
-              <option></option>
+            <select id="city" defaultValue={city} {...register('city')}>
+              <option value=""> </option>
               <option value="Минск">Минск</option>
               <option value="Гомель">Гомель</option>
               <option value="Брест">Брест</option>
@@ -124,11 +128,23 @@ const Forms: FC = () => {
         <div className="form__sex">
           Ваш пол:
           <div className="form__sex-item">
-            <input id="men" type="radio" value="мужской" {...register('sex')} />
+            <input
+              id="men"
+              defaultChecked={sex === 'мужской' ? true : false}
+              type="radio"
+              value="мужской"
+              {...register('sex')}
+            />
             <label htmlFor="men">Мужской</label>
           </div>
           <div className="form__sex-item">
-            <input id="women" type="radio" value="женский" {...register('sex')} />
+            <input
+              id="women"
+              defaultChecked={sex === 'женский' ? true : false}
+              type="radio"
+              value="женский"
+              {...register('sex')}
+            />
             <label htmlFor="women">
               Женский
               <div className="form__error">{errors.sex?.message}</div>
@@ -141,19 +157,36 @@ const Forms: FC = () => {
           <label htmlFor="photo">
             Выбрать фото
             <img width={20} src={download} alt="download" />
-            <div className="form__error">{errors.photo?.message}</div>
+            {/* <div className="form__error">{(errors.photo as any)?.message}</div> */}
           </label>
         </div>
 
         <div className="form__check">
-          <input type="checkbox" id="check" {...register('check')} />
+          <input
+            type="checkbox"
+            id="check"
+            defaultChecked={check === true && true}
+            {...register('check')}
+          />
           <label htmlFor="check">
             Согласен на обработку данных
             <div className="form__error">{errors.check?.message}</div>
           </label>
         </div>
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit" disabled={!isDirty || !!Object.keys(errors).length}>
+          Зарегистрироваться
+        </button>
       </form>
+
+      <div
+        className={isOpenModal ? 'form-modal open' : 'form-modal'}
+        onClick={() => setIsOpenModal(false)}
+      >
+        <div className="form-modal__content" onClick={(e) => e.stopPropagation()}>
+          <p>Данные успешно сохранены</p>
+          <button onClick={() => setIsOpenModal(false)}>Ok</button>
+        </div>
+      </div>
 
       <Users />
     </div>

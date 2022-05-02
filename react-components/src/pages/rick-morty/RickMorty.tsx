@@ -1,17 +1,12 @@
-import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { rickMortyApi } from '../../api/rick-morty-api';
+import React, { FC, useEffect } from 'react';
 import Preloader from '../../components/preloader/Preloader';
 import SearchBar from '../../components/search-bar/SearchBar';
-import { StateContext } from '../../context/context';
 import Characters from './characters/Characters';
 import './RickMorty.scss';
-import { GET_CHARACTERS, SET_CHARACTERS, SET_CHARACTERS_ERROR } from '../../store/store';
 import Paginator from '../../components/paginator/Paginator';
 import Selectors from '../../components/selectors/Selectors';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux-hooks';
 import { getCharactersByFilter } from '../../store/AsyncActionCreators';
-import { useNavigate } from 'react-router-dom';
-import { getFetchPage } from '../../helpers/helpers';
 
 export type character = {
   id: number;
@@ -42,7 +37,7 @@ const RickMorty: FC = React.memo(() => {
   } = useAppSelector((state) => state.characters);
 
   useEffect(() => {
-    if (!characters.length)
+    if (!characters.length && !errorMessage)
       dispatch(getCharactersByFilter({ fetchPage: 1, searchValue: '', status: '' }));
   }, []);
 
@@ -50,15 +45,17 @@ const RickMorty: FC = React.memo(() => {
     <div className="content">
       <SearchBar status={status} searchValue={searchValue} />
 
-      {isLoading && <Preloader />}
-
       <Selectors searchValue={searchValue} limitOnPage={limitOnPage} status={status} sort={sort} />
+
+      {isLoading && <Preloader />}
 
       <Characters sort={sort} characters={characters} />
 
       {errorMessage && <div className="error">Ошибка: {errorMessage}</div>}
 
-      <Paginator limitOnPage={limitOnPage} totalItems={totalItems} currPage={currPage} />
+      {!!totalItems && (
+        <Paginator limitOnPage={limitOnPage} totalItems={totalItems} currPage={currPage} />
+      )}
     </div>
   );
 });

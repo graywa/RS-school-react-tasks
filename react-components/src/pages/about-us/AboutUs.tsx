@@ -4,7 +4,7 @@ import './AboutUs.scss';
 function AboutUs() {
   return (
     <div className="about">
-      <h2>About Us</h2>
+      <h2>Developed by Graywa 🎲‍</h2>
     </div>
   );
 }

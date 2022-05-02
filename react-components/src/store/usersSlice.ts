@@ -8,6 +8,7 @@ interface usersState {
   city: string;
   sex: string;
   photo: string;
+  check: boolean;
 }
 
 const initialState: usersState = {
@@ -17,6 +18,7 @@ const initialState: usersState = {
   city: '',
   sex: '',
   photo: '',
+  check: false,
 };
 
 const usersSlice = createSlice({
@@ -26,9 +28,16 @@ const usersSlice = createSlice({
     addUser(state, { payload }) {
       state.users.push(payload);
     },
+    saveFiedsForm(state, { payload: { name, date, city, sex, check } }) {
+      state.userName = name;
+      state.date = date;
+      state.city = city;
+      state.sex = sex;
+      state.check = check;
+    },
   },
 });
 
-export const { addUser } = usersSlice.actions;
+export const { addUser, saveFiedsForm } = usersSlice.actions;
 
 export default usersSlice.reducer;

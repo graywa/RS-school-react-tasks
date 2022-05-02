@@ -49,7 +49,6 @@ const charactersSlice = createSlice({
   },
   extraReducers: {
     [getCharactersByFilter.fulfilled.type]: (state, action) => {
-      console.log(action);
       state.isLoading = false;
       state.errorMessage = '';
       const { currPage, limitOnPage } = state;
@@ -68,6 +67,8 @@ const charactersSlice = createSlice({
     [getCharactersByFilter.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.errorMessage = action.payload;
+      state.characters = [];
+      state.totalItems = 0;
     },
   },
 });
