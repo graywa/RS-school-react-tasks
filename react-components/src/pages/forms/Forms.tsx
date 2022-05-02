@@ -28,8 +28,8 @@ export interface IUser {
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(3, 'слишком короткое имя')
-    .max(10, 'слишком длинное имя')
+    .min(3, 'Слишком короткое имя')
+    .max(10, 'Слишком длинное имя')
     .required('Обязательное поле'),
   date: yup
     .string()
@@ -157,7 +157,7 @@ const Forms: FC = () => {
           <label htmlFor="photo">
             Выбрать фото
             <img width={20} src={download} alt="download" />
-            {/* <div className="form__error">{(errors.photo as any)?.message}</div> */}
+            <div className="form__error">{errors.photo && 'Выберите фото'}</div>
           </label>
         </div>
 

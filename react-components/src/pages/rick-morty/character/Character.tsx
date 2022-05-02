@@ -12,7 +12,7 @@ interface IProps {
 const Character: FC<IProps> = ({ id, name, species, gender, image }: IProps) => {
   return (
     <>
-      <Link className="item" to={`/${id}`}>
+      <Link className="item" to={`/${id}`} data-testid="character">
         <div>
           <img width={250} src={image} alt="image" />
         </div>

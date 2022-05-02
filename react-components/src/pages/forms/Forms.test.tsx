@@ -1,7 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import App from '../../App';
 import { renderWidthRouter } from '../../components/tests-helpers/renderWithRouter';
 import User from '../../components/user/User';
@@ -39,17 +38,16 @@ describe('actions in form', () => {
     renderWidthRouter(<App />, '/forms');
   });
 
-  test('registration button should be enabled in the beginning', () => {
-    const button: HTMLButtonElement = screen.getByRole('button');
+  test('registration button should be disabled in the beginning', () => {
+    const button: HTMLButtonElement = screen.getByText('Зарегистрироваться');
 
-    expect(button.disabled).toBe(false);
+    expect(button.disabled).toBe(true);
   });
 
   test('input name', () => {
     const nameInput = screen.getByLabelText('Ваше имя:');
     userEvent.type(nameInput, 'Валера');
     expect(screen.getByDisplayValue('Валера')).toBeInTheDocument();
-    //screen.debug();
   });
 
   test('choose date', async () => {
@@ -60,34 +58,34 @@ describe('actions in form', () => {
     expect(dateInput.value).toBe('2000-01-01');
   });
 
-  test('choose city', async () => {
+  test('choose city', () => {
     const selectCity = screen.getByRole('combobox');
 
-    await userEvent.selectOptions(selectCity, ['Гомель']);
+    userEvent.selectOptions(selectCity, ['Гомель']);
 
     expect(screen.getByRole<HTMLOptionElement>('option', { name: 'Гомель' }).selected).toBe(true);
     expect(screen.getByRole<HTMLOptionElement>('option', { name: 'Минск' }).selected).toBe(false);
     expect(screen.getByRole<HTMLOptionElement>('option', { name: 'Брест' }).selected).toBe(false);
   });
 
-  test('choose sex', async () => {
+  test('choose sex', () => {
     const radioInput: HTMLInputElement = screen.getByLabelText('Мужской');
 
-    await userEvent.click(radioInput);
+    userEvent.click(radioInput);
 
     expect(radioInput.checked).toBe(true);
   });
 
-  test('registration button should be enabled, and after sex chosen button should be disabled', async () => {
-    const button: HTMLButtonElement = screen.getByRole('button');
-    const radioInput: HTMLInputElement = screen.getByLabelText('Мужской');
+  test('registration button should be disabled, after sex chosen button should be enabled', async () => {
+    userEvent.click(screen.getByText(/about us/i));
+    userEvent.click(screen.getByText(/forms/i));
 
-    expect(button.disabled).toBe(false);
-
-    await userEvent.click(radioInput);
-
-    userEvent.click(button);
+    const button: HTMLButtonElement = screen.getByText('Зарегистрироваться');
+    const radioInput: HTMLInputElement = screen.getByLabelText('Женский');
 
     expect(button.disabled).toBe(true);
+
+    userEvent.click(radioInput);
+    expect(button.disabled).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import './SearchBar.css';
 import search from './assets/search.svg';
 import { changeCurrPage, setSearchValue } from '../../store/charactersSlice';
@@ -19,6 +19,10 @@ const SearchBar: FC<IProps> = ({ searchValue, status }) => {
     dispatch(getCharactersByFilter({ fetchPage: 1, searchValue, status }));
     dispatch(changeCurrPage(1));
   };
+
+  useEffect(() => {
+    localStorage.setItem('searchValue', searchValue);
+  }, [searchValue]);
 
   return (
     <form onSubmit={handleSubmit}>

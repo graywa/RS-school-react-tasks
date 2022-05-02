@@ -5,12 +5,18 @@ import RickMorty from './RickMorty';
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 import { baseUrl } from '../../api/api.ts';
+import { Provider } from 'react-redux';
+import { store } from '../../store/redux-store';
 
 jest.mock('axios');
 
 describe('render', () => {
   test('render rick-morty page', async () => {
-    renderWidthRouter(<RickMorty />);
+    renderWidthRouter(
+      <Provider store={store}>
+        <RickMorty />
+      </Provider>
+    );
     expect(screen.getByPlaceholderText('search...')).toBeInTheDocument();
   });
 });
@@ -72,6 +78,9 @@ describe('fetch rick-morty characters', () => {
             created: '2017-11-04T19:22:43.665Z',
           },
         ],
+        info: {
+          count: 4,
+        },
       },
     };
   });
@@ -80,20 +89,30 @@ describe('fetch rick-morty characters', () => {
     jest.clearAllMocks();
   });
 
-  test('fetch characters(4+4)', async () => {
+  test('fetch 4 characters', async () => {
     axios.get.mockReturnValue(response);
-    renderWidthRouter(<RickMorty />);
-    const characters = await screen.findAllByText('Gender:');
-    expect(characters.length).toBe(8);
+    renderWidthRouter(
+      <Provider store={store}>
+        <RickMorty />
+      </Provider>
+    );
+    const characters = await screen.findAllByTestId('character');
+    expect(characters.length).toBe(4);
     expect(axios.get).toBeCalledTimes(1);
   });
   test('fetch by search "ric"', async () => {
     axios.get.mockReturnValue(response);
-    renderWidthRouter(<RickMorty />);
+    renderWidthRouter(
+      <Provider store={store}>
+        <RickMorty />
+      </Provider>
+    );
     const searchInput = screen.getByPlaceholderText('search...');
     userEvent.type(searchInput, 'ric');
     fireEvent.submit(searchInput);
-    expect(axios.get).toBeCalledTimes(2);
-    expect(axios.get).toHaveBeenCalledWith(`${baseUrl}/?name=ric`);
+    expect(axios.get).toHaveBeenCalledWith(baseUrl, {
+      params: { name: 'ric', page: 1, status: '' },
+    });
+    expect(axios.get).toBeCalledTimes(1);
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, getAllByText, getByTestId, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from './components/header/Header';
 import Card from './components/card/Card';
@@ -9,6 +9,8 @@ import userEvent from '@testing-library/user-event';
 import Cards from './components/cards/Cards';
 import RickMorty from './pages/rick-morty/RickMorty';
 import Page404 from './pages/page-404/Page404';
+import { Provider } from 'react-redux';
+import { store } from './store/redux-store';
 
 describe('render', () => {
   test('render page 404', () => {
@@ -18,12 +20,14 @@ describe('render', () => {
   });
 
   test('render link home', () => {
-    const { getByText } = render(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Header />
+        </BrowserRouter>
+      </Provider>
     );
-    const homeLink = getByText(/Rick and Morty/i);
+    const homeLink = getByTestId(/home/i);
     expect(homeLink).toBeInTheDocument();
   });
 
@@ -71,7 +75,6 @@ describe('events', () => {
     );
     userEvent.type(screen.getByRole('textbox'), ' World');
     expect(screen.queryByDisplayValue('Hello World')).toBeInTheDocument();
-    screen.debug();
   });
 
   test('click on about link', () => {
@@ -85,7 +88,11 @@ describe('events', () => {
   });
 
   test('focus on input', () => {
-    const { getByTestId } = render(<SearchBar status={''} searchValue={''} />);
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <SearchBar status={''} searchValue={''} />
+      </Provider>
+    );
     const input = getByTestId('search-input');
     expect(input).not.toHaveFocus();
     input.focus();
@@ -129,22 +136,24 @@ describe('mock localStorage', () => {
   });
 
   test('setItem to localStorage', () => {
-    const { getByText } = render(
+    const { getByTestId, getByText } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    userEvent.click(getByText(/Rick and Morty/i));
-    userEvent.type(screen.getByRole('textbox'), 'No war');
+    userEvent.click(getByTestId(/home/i));
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'No war' } });
     userEvent.click(getByText(/about us/i));
     expect(localStorage.getItem('searchValue')).toBe('No war');
   });
 
   test('getItem from localStorage', () => {
     render(
-      <BrowserRouter>
-        <RickMorty />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <RickMorty />
+        </BrowserRouter>
+      </Provider>
     );
     expect(screen.getByDisplayValue('No war')).toBeInTheDocument();
   });

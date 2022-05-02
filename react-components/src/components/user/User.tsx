@@ -2,7 +2,6 @@ import React from 'react';
 import './User.scss';
 
 interface IProps {
-  key: number;
   name: string;
   date: string;
   city: string;
@@ -11,9 +10,9 @@ interface IProps {
 }
 
 function User(props: IProps) {
-  const { key, name, date, city, photo, sex } = props;
+  const { name, date, city, photo, sex } = props;
   return (
-    <div key={key} className="user">
+    <div className="user">
       <div className="user__photo">
         <img width={150} src={photo} alt="photo" />
       </div>

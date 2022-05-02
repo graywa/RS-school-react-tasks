@@ -37,7 +37,9 @@ const Header: FC = () => {
     <header className="header">
       <div className="container">
         <nav className="header__content">
-          <NavLink to="/">Rick and Morty</NavLink>
+          <NavLink to="/" data-testid="home">
+            Rick and Morty
+          </NavLink>
           <span className="links">
             <NavLink to="/cards">Cards</NavLink>
             <NavLink to="/forms">Forms</NavLink>
